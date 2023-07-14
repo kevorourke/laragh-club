@@ -20,7 +20,7 @@
     "eslint-config-next": "13.4.7",
     "graphql": "^16.7.1",
     "lucide-react": "^0.259.0",
-    "next": "13.4.7",
+    "next": "^13.4.7",
     "next-mdx-remote": "^4.4.1",
     "postcss": "8.4.24",
     "react": "18.2.0",
@@ -28,5 +28,9 @@
     "tailwind-merge": "^1.13.2",
     "tailwindcss": "3.3.2",
     "tailwindcss-animate": "^1.0.6"
+  },
+  "devDependencies": {
+    "aws-crt": "^1.15.20",
+    "encoding": "^0.1.13"
   }
 }
