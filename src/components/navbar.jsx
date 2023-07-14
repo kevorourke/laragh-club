@@ -17,7 +17,7 @@ import Link from "next/link";
 function Navbar() {
   return (
     <NavigationMenu>
-      <Image src={Logo} height={100} />
+      <Image src={Logo} height={100} alt="laragh logo" />
       <NavigationMenuList>
         <NavigationMenuItem>
           <Link href="/news" legacyBehavior passHref>
