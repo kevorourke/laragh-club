@@ -11,13 +11,13 @@ import {
   navigationMenuTriggerStyle,
 } from "@/components/ui/navigation-menu";
 import Image from "next/image";
-import Logo from "../../public/laragh.png";
+import logo from "../../public/laragh.png";
 import Link from "next/link";
 
 function Navbar() {
   return (
     <NavigationMenu>
-      <Image src={Logo} height={100} alt="laragh logo" />
+      <Image src={logo} height={100} alt="laragh logo" />
       <NavigationMenuList>
         <NavigationMenuItem>
           <Link href="/news" legacyBehavior passHref>
