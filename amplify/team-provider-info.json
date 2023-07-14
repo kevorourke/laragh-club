@@ -1,0 +1,20 @@
+{
+  "dev": {
+    "awscloudformation": {
+      "AuthRoleName": "amplify-laraghclub-dev-222623-authRole",
+      "UnauthRoleArn": "arn:aws:iam::974623281194:role/amplify-laraghclub-dev-222623-unauthRole",
+      "AuthRoleArn": "arn:aws:iam::974623281194:role/amplify-laraghclub-dev-222623-authRole",
+      "Region": "eu-west-1",
+      "DeploymentBucketName": "amplify-laraghclub-dev-222623-deployment",
+      "UnauthRoleName": "amplify-laraghclub-dev-222623-unauthRole",
+      "StackName": "amplify-laraghclub-dev-222623",
+      "StackId": "arn:aws:cloudformation:eu-west-1:974623281194:stack/amplify-laraghclub-dev-222623/ed1500a0-21c3-11ee-9fca-0237149bb8bf",
+      "AmplifyAppId": "d3biz8c6i1z1tq"
+    },
+    "categories": {
+      "auth": {
+        "laraghclub85543c0e": {}
+      }
+    }
+  }
+}
