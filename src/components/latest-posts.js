@@ -4,7 +4,7 @@ import { GET_ALL_POSTS } from "../graphql/queries";
 
 async function getData() {
   const client = new ApolloClient({
-    uri: "http://localhost:1337/graphql",
+    uri: `${process.env.STRAPI_URL}/graphql`,
     cache: new InMemoryCache(),
   });
 
