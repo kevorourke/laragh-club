@@ -1,5 +1,5 @@
 import Image from "next/image";
-import LottoBalls from "@/components/lotto-balls";
+import LottoBalls from "@/components/LottoBalls";
 
 export default function Home() {
   return (

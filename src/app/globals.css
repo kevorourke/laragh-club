@@ -1,6 +1,7 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+@tailwind forms;
 
 @layer base {
   :root {
@@ -74,5 +75,42 @@
   }
   body {
     @apply bg-background text-foreground;
+  }
+}
+
+/* tailwind.css or your custom CSS file */
+.lotto-ball {
+  width: calc(100% / 6); /* Display 6 balls in each row */
+  max-width: 50px; /* Limit the maximum width of each ball */
+  height: 50px;
+  border-radius: 50%;
+
+  font-size: 1.2rem;
+  font-weight: bold;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 5px;
+  cursor: pointer;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+/* Optional hover effect */
+.lotto-ball:hover {
+  background-color: #ff5722; /* Replace with your desired hover color */
+}
+
+/* Responsive styles */
+@media (max-width: 640px) {
+  /* Show 4 balls in each row on smaller screens */
+  .lotto-ball {
+    width: calc(100% / 4);
+  }
+}
+
+@media (max-width: 480px) {
+  /* Show 2 balls in each row on even smaller screens */
+  .lotto-ball {
+    width: calc(100% / 2);
   }
 }

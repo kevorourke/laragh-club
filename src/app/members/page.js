@@ -1,37 +1,21 @@
-"use client";
-import { Authenticator } from "@aws-amplify/ui-react";
-import "@aws-amplify/ui-react/styles.css";
+import StackedTable from "@/components/StackedTable";
+import { createServerSupabaseClient } from "@/supabase/supabase-server";
+import CheckoutButton from "@/components/CheckoutButton";
 
-import { Amplify } from "aws-amplify";
-import awsExports from "../../aws-exports";
+export default async function Page() {
+  const supabase = createServerSupabaseClient();
 
-Amplify.configure(awsExports);
+  const { data, error } = await supabase.from("members").select();
+  console.log(data);
+  console.log(error);
+  const members = data;
 
-function getRenderTime() {
-  const renderedAt = new Date();
-  const formattedBuildDate = renderedAt.toLocaleDateString("en-US", {
-    dateStyle: "long",
-  });
-  const formattedBuildTime = renderedAt.toLocaleTimeString("en-US", {
-    timeStyle: "long",
-  });
-  return {
-    renderedAt: `${formattedBuildDate} at ${formattedBuildTime}`,
-  };
-}
+  // Partial of ./components/CheckoutForm.tsx
 
-function Page({ signOut, user }) {
-  const renderedAt = getRenderTime();
   return (
-    <Authenticator>
-      {({ signOut, user }) => (
-        <main>
-          <h1>Hello {user.username}</h1>
-          <button onClick={signOut}>Sign out</button>
-        </main>
-      )}
-    </Authenticator>
+    <>
+      <StackedTable members={members} />
+      <CheckoutButton />
+    </>
   );
 }
-
-export default Page;
