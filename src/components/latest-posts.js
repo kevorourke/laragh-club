@@ -3,6 +3,7 @@ import { ApolloClient, InMemoryCache } from "@apollo/client";
 import { GET_ALL_POSTS } from "../graphql/queries";
 
 async function getData() {
+  console.log(process.env.STRAPI_URL);
   const client = new ApolloClient({
     uri: `${process.env.STRAPI_URL}/graphql`,
     cache: new InMemoryCache(),
