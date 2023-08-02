@@ -1,5 +1,4 @@
 function NewsTile({ article }) {
-  console.log(article);
   return (
     <article
       key={article.id}

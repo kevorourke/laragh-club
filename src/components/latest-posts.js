@@ -1,4 +1,4 @@
-import NewsTile from "./news-tile";
+import NewsTile from "./NewsTile";
 import { ApolloClient, InMemoryCache } from "@apollo/client";
 import { GET_ALL_POSTS } from "../graphql/queries";
 
