@@ -1,33 +1,38 @@
 "use client";
 
-import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
-import { useSupabase, useSession } from "@/supabase/SupabaseProvider";
+import { useSupabase } from "@/supabase/SupabaseProvider";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 
 export default function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [signUp, setSignUp] = useState(false);
+  const [errorStatus, setErrorStatus] = useState("");
   const router = useRouter();
   const supabase = useSupabase();
-  const session = useSession();
 
   const handleSignUp = async () => {
-    await supabase.auth.signUp({
+    const { data, error } = await supabase.auth.signUp({
       email,
       password,
       options: {
         emailRedirectTo: `${location.origin}/auth/callback`,
       },
     });
+    console.log(data.user);
+    error ? setErrorStatus(error) : null;
     router.refresh();
   };
 
   const handleSignIn = async () => {
-    await supabase.auth.signInWithPassword({
+    setErrorStatus(null);
+    const { data, error } = await supabase.auth.signInWithPassword({
       email,
       password,
     });
+    console.log(data);
+    setErrorStatus(error.message);
     router.refresh();
   };
 
@@ -36,34 +41,23 @@ export default function Login() {
     router.refresh();
   };
 
-  const userDetails = async () => {
-    const {
-      data: { user },
-      error,
-    } = await supabase.auth.getUser();
-    if (error) {
-      console.log(error.message);
-      return;
-    }
-    console.log("user details" + user.email);
-    console.log(user);
-    return user;
-  };
-  const data = JSON.stringify(userDetails());
   return (
     <div>
-      {session ? data : null}
       <div className="flex min-h-full flex-1 flex-col justify-center px-6 py-12 lg:px-8">
         <div className="sm:mx-auto sm:w-full sm:max-w-sm">
-          <img
-            className="mx-auto h-10 w-auto"
-            src="https://tailwindui.com/img/logos/mark.svg?color=indigo&shade=600"
-            alt="Your Company"
-          />
           <h2 className="mt-10 text-center text-2xl font-bold leading-9 tracking-tight text-gray-900">
-            Sign in to your account
+            {!signUp ? "Sign in to your account now" : "Create Account"}
           </h2>
         </div>
+
+        {errorStatus ? (
+          <div
+            className="sm:mx-auto sm:w-full sm:max-w-sm bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded text-center "
+            role="alert"
+          >
+            <strong className="font-bold">{errorStatus}</strong>
+          </div>
+        ) : null}
 
         <div className="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
           <form className="space-y-6" action="#" method="POST">
@@ -120,37 +114,49 @@ export default function Login() {
             </div>
 
             <div>
-              <button
-                type="submit"
-                onClick={handleSignIn}
-                className="flex w-full justify-center rounded-md bg-indigo-600 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
-              >
-                Sign in
-              </button>
-              <button
-                type="submit"
-                onClick={handleSignUp}
-                className="flex w-full justify-center rounded-md bg-indigo-600 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
-              >
-                Sign up
-              </button>
+              {!signUp ? (
+                <button
+                  type="submit"
+                  onClick={handleSignIn}
+                  className="flex w-full justify-center rounded-md bg-indigo-600 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+                >
+                  Sign in
+                </button>
+              ) : (
+                <button
+                  type="submit"
+                  onClick={handleSignUp}
+                  className="flex w-full justify-center rounded-md bg-indigo-600 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+                >
+                  Sign up
+                </button>
+              )}
             </div>
           </form>
 
-          <p className="mt-10 text-center text-sm text-gray-500">
-            Not a member?{" "}
-            <a
-              href="#"
-              className="font-semibold leading-6 text-indigo-600 hover:text-indigo-500"
-            >
-              Start a 14 day free trial
-            </a>
-          </p>
+          {!signUp ? (
+            <p className="mt-10 text-center text-sm text-gray-500">
+              No account?{" "}
+              <button
+                onClick={() => setSignUp(true)}
+                className="font-semibold leading-6 text-indigo-600 hover:text-indigo-500"
+              >
+                Create one now
+              </button>
+            </p>
+          ) : (
+            <p className="mt-10 text-center text-sm text-gray-500">
+              Already have an account?{" "}
+              <button
+                onClick={() => setSignUp(false)}
+                className="font-semibold leading-6 text-indigo-600 hover:text-indigo-500"
+              >
+                Sign In
+              </button>
+            </p>
+          )}
         </div>
       </div>
-      <button onClick={handleSignUp}>Sign up</button>
-      <button onClick={handleSignIn}>Sign in</button>
-      <button onClick={handleSignOut}>Sign out</button>
     </div>
   );
 }

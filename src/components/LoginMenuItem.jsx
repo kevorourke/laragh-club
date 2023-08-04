@@ -44,7 +44,7 @@ function LoginMenuItem({ type }) {
         <div className="hidden lg:flex lg:flex-1 lg:justify-end">
           <a
             onClick={handleSignOut}
-            className="text-sm font-semibold leading-6 text-gray-900"
+            className="text-white text-sm font-semibold leading-6 text-gray-900"
           >
             {label} <span aria-hidden="true">&rarr;</span>
           </a>
@@ -55,7 +55,7 @@ function LoginMenuItem({ type }) {
         <div className="hidden lg:flex lg:flex-1 lg:justify-end">
           <a
             href={link}
-            className="text-sm font-semibold leading-6 text-gray-900"
+            className="text-white text-sm font-semibold leading-6 text-gray-900"
           >
             {label} <span aria-hidden="true">&rarr;</span>
           </a>

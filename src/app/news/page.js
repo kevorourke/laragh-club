@@ -1,4 +1,4 @@
-import LatestPost from "@/components/latest-posts";
+import LatestPost from "@/components/LatestPosts";
 
 function Page() {
   return (

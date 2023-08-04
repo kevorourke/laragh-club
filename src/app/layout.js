@@ -1,8 +1,11 @@
 import "./globals.css";
 import { Inter } from "next/font/google";
-import Navbar from "@/components/navbar";
+import Navbar from "@/components/Navbar";
+import Footer from "@/components/Footer";
 import SupabaseProvider from "@/supabase/SupabaseProvider";
 import { getSession } from "@/supabase/supabase-server";
+import Image from "next/image";
+import bgImage from "../../public/stradone.gif";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -23,8 +26,10 @@ export default async function RootLayout({ children }) {
       <body className={inter.className}>
         <SupabaseProvider session={session}>
           <Navbar />
-
-          {children}
+          <div className="relative min-h-screen">
+            <div className="pb-2.5">{children}</div>
+            <Footer />
+          </div>
         </SupabaseProvider>
       </body>
     </html>

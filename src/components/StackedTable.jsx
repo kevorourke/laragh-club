@@ -59,7 +59,7 @@ export default function StackedTable({ members }) {
           </thead>
           <tbody className="divide-y divide-gray-200 bg-white">
             {members.map((member) => (
-              <tr key={member.email}>
+              <tr key={member.id}>
                 <td className="w-full max-w-0 py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:w-auto sm:max-w-none sm:pl-0">
                   {member.forename} {member.surname}
                   <dl className="font-normal lg:hidden">

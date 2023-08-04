@@ -15,7 +15,8 @@ export default async function Page() {
   return (
     <>
       <StackedTable members={members} />
-      <CheckoutButton />
+
+      <CheckoutButton members={members} />
     </>
   );
 }

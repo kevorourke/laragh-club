@@ -18,3 +18,10 @@ export const isFormInvalid = (err) => {
   if (Object.keys(err).length > 0) return true;
   return false;
 };
+
+export const isAdult = (dateString) => {
+  const today = new Date();
+  const birthDate = new Date(dateString);
+  const age = today.getFullYear() - birthDate.getFullYear();
+  return age >= 19 ? true : false;
+};
