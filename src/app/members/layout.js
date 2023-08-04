@@ -1,4 +1,4 @@
-import Login from "@/components/login";
+import Login from "@/components/Login";
 import { getSession } from "@/supabase/supabase-server";
 
 async function LoggedInLayout({ children }) {
