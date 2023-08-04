@@ -4,8 +4,6 @@ import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import SupabaseProvider from "@/supabase/SupabaseProvider";
 import { getSession } from "@/supabase/supabase-server";
-import Image from "next/image";
-import bgImage from "../../public/stradone.gif";
 
 const inter = Inter({ subsets: ["latin"] });
 
