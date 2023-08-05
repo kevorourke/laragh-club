@@ -3,7 +3,9 @@ import { headers } from "next/headers";
 
 export async function POST(req) {
   const body = await req.text();
-  const sig = headers().get("Stripe-Signature");
+  const headerList = headers();
+  console.log(headerList);
+  const sig = headerList.get("Stripe-Signature");
   const webhookSecret = process.env.STRIPE_WEBHOOK_SECRET;
   const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
   let event;
