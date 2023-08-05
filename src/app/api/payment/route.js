@@ -7,6 +7,7 @@ export async function POST(request) {
   let items = data.items;
   const session = await stripe.checkout.sessions.create({
     line_items: items,
+    metadata: { membershipIds: "2hsddjh" },
     mode: "payment",
     success_url: "http://localhost:3000",
     cancel_url: "http://localhost:3000",
