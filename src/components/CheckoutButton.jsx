@@ -7,14 +7,17 @@ function CheckoutButton({ members }) {
   const [adultCount, setAdultCount] = useState();
   const [childCount, setChildCount] = useState();
   const [playingAdultCount, setPlayingAdultCount] = useState();
+  const [metadata, setMetadata] = useState();
 
   useEffect(() => {
     let [adultCountA, childCountA, playingAdultCountA] = [0, 0, 0];
-
-    members.forEach((member) => {
+    let metadataObj = { memberIds: [] };
+    members.forEach((member, i) => {
       if (!member.payment_due) {
         return;
       }
+      metadataObj.memberIds.push(member.id);
+
       if (!member.adult) {
         childCountA = childCountA + 1;
       } else if (member.player === "yes") {
@@ -35,14 +38,16 @@ function CheckoutButton({ members }) {
       price: "price_1NbQX1LJdJAdS6gP3ii4bnc1",
       quantity: playingAdultCountA,
     });
-    fetchPrices();
+    metadataObj.memberIds = JSON.stringify(metadataObj.memberIds);
+    setMetadata(metadataObj);
+    // fetchPrices();
   }, [members]);
 
-  const fetchPrices = async () => {
-    const { data } = await axios.get("/api/getproducts");
-    // setPrices(data)
-    console.log(data);
-  };
+  // const fetchPrices = async () => {
+  //   const { data } = await axios.get("/api/getproducts");
+  //   // setPrices(data)
+  //   console.log(data);
+  // };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -62,6 +67,7 @@ function CheckoutButton({ members }) {
       "/api/payment",
       {
         items: itemsArray,
+        metadata: metadata,
       },
       {
         headers: {

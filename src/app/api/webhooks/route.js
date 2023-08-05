@@ -1,5 +1,6 @@
 import Stripe from "stripe";
 import { headers } from "next/headers";
+import { createNewPaymentRecord } from "@/supabase/supabase-admin";
 
 export async function POST(req) {
   const body = await req.text();
@@ -21,6 +22,10 @@ export async function POST(req) {
   if (event.type === "checkout.session.completed") {
     try {
       const checkoutSession = event.data.object;
+      let data = {};
+      data.amount = checkoutSession.amount_total;
+      data.member_ids = JSON.parse(checkoutSession.metadata.memberIds);
+      createNewPaymentRecord(data);
       console.log(checkoutSession);
     } catch (error) {
       console.log(error);
