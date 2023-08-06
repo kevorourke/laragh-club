@@ -10,6 +10,13 @@ const GET_ALL_POSTS = gql`
           title
           description
           urlSlug
+          image {
+            data {
+              attributes {
+                url
+              }
+            }
+          }
         }
         __typename
       }
@@ -43,4 +50,45 @@ const GET_INDIVIDUAL_POST = gql`
   }
 `;
 
-export { GET_ALL_POSTS, GET_INDIVIDUAL_POST, GET_ALL_SLUGS };
+const GET_ABOUT_CONTENT = gql`
+  query {
+    abouts {
+      data {
+        attributes {
+          title
+          description
+          content
+          gallery {
+            data {
+              attributes {
+                url
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+`;
+
+const GET_ALL_DOWNLOADS = gql`
+  query {
+    downloads {
+      data {
+        attributes {
+          url
+          description
+          title
+        }
+      }
+    }
+  }
+`;
+
+export {
+  GET_ALL_POSTS,
+  GET_INDIVIDUAL_POST,
+  GET_ALL_SLUGS,
+  GET_ABOUT_CONTENT,
+  GET_ALL_DOWNLOADS,
+};

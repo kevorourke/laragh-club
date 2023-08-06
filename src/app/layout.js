@@ -16,9 +16,7 @@ export const dynamic = "force-dynamic";
 
 export default async function RootLayout({ children }) {
   const session = await getSession();
-  console.log("Start");
-  console.log(session);
-  console.log("End");
+
   return (
     <html lang="en">
       <body className={inter.className}>

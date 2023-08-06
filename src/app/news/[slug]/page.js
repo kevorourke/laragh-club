@@ -3,7 +3,19 @@ import { GET_ALL_SLUGS, GET_INDIVIDUAL_POST } from "../../../graphql/queries";
 
 export default async function Page({ params }) {
   const data = await getData(params);
-  return <div>My Post:{data.title}</div>;
+  return (
+    <div className="bg-white px-6 py-32 lg:px-8">
+      <div className="mx-auto max-w-3xl text-base leading-7 text-gray-700">
+        <p className="text-base font-semibold leading-7 text-indigo-600">
+          {data.title}
+        </p>
+        <h1 className="mt-2 text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">
+          {data.description}
+        </h1>
+        <p className="mt-6 text-xl leading-8">{data.content}</p>
+      </div>
+    </div>
+  );
 }
 
 const client = new ApolloClient({
@@ -26,6 +38,6 @@ async function getData(params) {
     query: GET_INDIVIDUAL_POST,
     variables: { slugUrl: params.slug },
   });
-  console.log(data);
+
   return data.newsArticles.data[0].attributes;
 }

@@ -5,7 +5,6 @@ import { createNewPaymentRecord } from "@/supabase/supabase-admin";
 export async function POST(req) {
   const body = await req.text();
   const headerList = headers();
-  console.log(headerList);
   const sig = headerList.get("Stripe-Signature");
   const webhookSecret = process.env.STRIPE_WEBHOOK_SECRET;
   const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
@@ -15,7 +14,7 @@ export async function POST(req) {
     if (!sig || !webhookSecret) return;
     event = stripe.webhooks.constructEvent(body, sig, webhookSecret);
   } catch (err) {
-    console.log(`❌ Error message: ${err.message}`);
+    console.log(` Error message: ${err.message}`);
     return new Response(`Webhook Error: ${err.message}`, { status: 400 });
   }
 

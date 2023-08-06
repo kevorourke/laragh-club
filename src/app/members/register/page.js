@@ -19,7 +19,6 @@ function Page() {
     const { error } = await supabase
       .from("members")
       .insert({ ...inputValues, user_id: session.user.id });
-    console.log(error);
   };
 
   const generateInitialState = (data) => {

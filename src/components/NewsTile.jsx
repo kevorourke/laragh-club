@@ -1,3 +1,5 @@
+import Image from "next/image";
+
 function NewsTile({ article }) {
   return (
     <article
@@ -30,21 +32,15 @@ function NewsTile({ article }) {
         </p>
       </div>
       <div className="relative mt-8 flex items-center gap-x-4">
-        {/* <img
-          src={article.author.imageUrl}
-          alt=""
-          className="h-10 w-10 rounded-full bg-gray-50"
-        /> */}
-        <div className="text-sm leading-6">
-          <p className="font-semibold text-gray-900">
-            {/* <a href={article.author.href}> */}
-            <span className="absolute inset-0" />
-            {/* {article.author.name} */}
-            Test author
-            {/* </a> */}
-          </p>
-          <p className="text-gray-600">Test role</p>
-        </div>
+        {article.attributes.image.data ? (
+          <Image
+            src={article.attributes.image.data.attributes.url}
+            alt=""
+            width="800"
+            height="400"
+            className="h-40 w-80  bg-gray-50"
+          />
+        ) : null}
       </div>
     </article>
   );
