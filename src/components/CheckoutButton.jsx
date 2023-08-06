@@ -8,6 +8,7 @@ function CheckoutButton({ members }) {
   const [childCount, setChildCount] = useState();
   const [playingAdultCount, setPlayingAdultCount] = useState();
   const [metadata, setMetadata] = useState();
+  const [cardData, setCardData] = useState();
 
   useEffect(() => {
     let [adultCountA, childCountA, playingAdultCountA] = [0, 0, 0];
@@ -40,8 +41,13 @@ function CheckoutButton({ members }) {
     });
     metadataObj.memberIds = JSON.stringify(metadataObj.memberIds);
     setMetadata(metadataObj);
+    setCardData([
+      { name: "Adult Member", quantity: adultCountA },
+      { name: "Child Member", quantity: childCountA },
+      { name: "Playing Adult Member", quantity: playingAdultCountA },
+    ]);
     // fetchPrices();
-  }, [members]);
+  }, []);
 
   // const fetchPrices = async () => {
   //   const { data } = await axios.get("/api/getproducts");
@@ -77,10 +83,39 @@ function CheckoutButton({ members }) {
     );
     window.location.assign(data);
   };
-  // ...
+  console.log(cardData);
+
   return (
     <>
-      <button onClick={handleSubmit}>Submit</button>
+      <div>
+        <h3 className="text-base font-semibold leading-6 text-gray-900">
+          Payments Due
+        </h3>
+        {cardData ? (
+          <dl className="mt-5 grid grid-cols-1 gap-5 sm:grid-cols-3">
+            {cardData.map((item) => (
+              <div
+                key={item.name}
+                className="overflow-hidden rounded-lg bg-white px-4 py-5 shadow sm:p-6"
+              >
+                <dt className="truncate text-sm font-medium text-gray-500">
+                  {item.name}
+                </dt>
+                <dd className="mt-1 text-3xl font-semibold tracking-tight text-gray-900">
+                  {item.quantity}
+                </dd>
+              </div>
+            ))}
+          </dl>
+        ) : null}
+        <button
+          type="button"
+          onClick={handleSubmit}
+          className="rounded-md bg-indigo-600 px-3.5 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+        >
+          Pay membership
+        </button>
+      </div>
     </>
   );
 }

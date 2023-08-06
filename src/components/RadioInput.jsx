@@ -1,14 +1,14 @@
 function RadioInput({ formData, change }) {
-  const { field_label, field_name, options, message } = formData;
+  const { label, name, options, message } = formData;
   return (
     <fieldset>
-      <legend className="sr-only">{field_label}</legend>
+      <legend className="sr-only">{label}</legend>
       <div className="sm:grid sm:grid-cols-3 sm:items-baseline sm:gap-4 sm:py-6">
         <div
           className="text-sm font-semibold leading-6 text-gray-900"
           aria-hidden="true"
         >
-          {field_label}
+          {label}
         </div>
         <div className="mt-1 sm:col-span-2 sm:mt-0">
           <div className="max-w-lg">
@@ -18,7 +18,7 @@ function RadioInput({ formData, change }) {
                 <div className="flex items-center gap-x-3" key={option.id}>
                   <input
                     id={option.name}
-                    name={field_name}
+                    name={name}
                     onChange={(e) => {
                       console.log(e);
                       change(e);

@@ -9,17 +9,16 @@ function classNames(...classes) {
 }
 
 export default function SelectInput({ formData, change, selected }) {
-  const { field_label, field_name, field_type, field_value, select_values } =
-    formData;
+  const { label, name, type, select_values } = formData;
 
   return (
     <Listbox
-      id={field_name}
+      id={name}
       value={selected}
       onChange={(e) => {
         const data = {
           target: {
-            id: field_name,
+            id: name,
             value: e,
           },
         };
@@ -30,7 +29,7 @@ export default function SelectInput({ formData, change, selected }) {
       {({ open }) => (
         <>
           <Listbox.Label className="block text-sm font-medium leading-6 text-gray-900">
-            {field_label}
+            {label}
           </Listbox.Label>
           <div className="relative mt-2">
             <Listbox.Button className="relative w-full cursor-default rounded-md bg-white py-1.5 pl-3 pr-10 text-left text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:outline-none focus:ring-2 focus:ring-indigo-600 sm:text-sm sm:leading-6">

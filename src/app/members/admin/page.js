@@ -1,13 +1,12 @@
 "use client";
-
-import { useState } from "react";
-
-import { add_member_fields } from "@/lib/form_data";
+import { create_team_fields } from "@/lib/form_data";
 import { useSupabase, useSession } from "@/supabase/SupabaseProvider";
 import Form from "@/components/Form";
+import { useState } from "react";
 
 function Page() {
-  const allfields = add_member_fields;
+  const allfields = create_team_fields;
+
   const supabase = useSupabase();
   const session = useSession();
 
@@ -17,17 +16,15 @@ function Page() {
 
   const onSubmit = async () => {
     const { error } = await supabase
-      .from("members")
+      .from("teams")
       .insert({ ...inputValues, user_id: session.user.id });
     console.log(error);
   };
 
   const generateInitialState = (data) => {
     let initialObj = {};
-    data.forEach(
-      (item) => (initialObj = { ...initialObj, [item.field_name]: null })
-    );
-    initialObj = { ...initialObj, county: "Antrim", country: "Ireland" };
+    data.forEach((item) => (initialObj = { ...initialObj, [item.name]: null }));
+    initialObj = { ...initialObj, year: [], country: "Ireland" };
     return initialObj;
   };
 
@@ -37,8 +34,19 @@ function Page() {
   const handleChange = ({ target }) => {
     let value = null;
     let key = target.id;
+
     if (target.type === "checkbox") {
-      value = target.checked;
+      const parent = target.dataset.parent;
+      if (target.checked) {
+        const newArr = inputValues[parent].push(key);
+        setInputValues({
+          ...inputValues,
+          [parent]: newArr,
+        });
+      }
+
+      return;
+      // value = target.checked;
     } else if (target.type === "radio") {
       key = target.name;
       value = target.id;
@@ -51,13 +59,10 @@ function Page() {
       [key]: value,
     });
   };
-
-  // const output = allfields.map(field =>
-
   return (
     <Form
       allfields={allfields}
-      title={"Create new team"}
+      title={"Add new member"}
       description={"Please fill out all the details below"}
       inputValues={inputValues}
       handleChange={handleChange}

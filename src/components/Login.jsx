@@ -22,6 +22,7 @@ export default function Login() {
     });
     console.log(data.user);
     error ? setErrorStatus(error) : null;
+    console.log(error.message);
     router.refresh();
   };
 

@@ -1,15 +1,15 @@
 function CheckBoxInput({ formData, change }) {
-  const { field_label, options } = formData;
+  const { label, options } = formData;
 
   return (
     <fieldset>
-      <legend className="sr-only">{field_label}</legend>
+      <legend className="sr-only">{label}</legend>
       <div className="sm:grid sm:grid-cols-3 sm:gap-4 sm:py-6">
         <div
           className="text-sm font-semibold leading-6 text-gray-900"
           aria-hidden="true"
         >
-          {field_label}
+          {label}
         </div>
         <div className="mt-4 sm:col-span-2 sm:mt-0">
           <div className="max-w-lg space-y-6">
@@ -23,6 +23,7 @@ function CheckBoxInput({ formData, change }) {
                       console.log(e);
                       change(e);
                     }}
+                    data-parent={option.parent}
                     type="checkbox"
                     className="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-600"
                   />

@@ -9,6 +9,7 @@ export default async function Page() {
   console.log(data);
   console.log(error);
   const members = data;
+  const paymentMembers = data.filter((item) => item.payment_due === true);
 
   // Partial of ./components/CheckoutForm.tsx
 
@@ -16,7 +17,7 @@ export default async function Page() {
     <>
       <StackedTable members={members} />
 
-      <CheckoutButton members={members} />
+      {paymentMembers ? <CheckoutButton members={paymentMembers} /> : null}
     </>
   );
 }

@@ -26,6 +26,6 @@ async function getData(params) {
     query: GET_INDIVIDUAL_POST,
     variables: { slugUrl: params.slug },
   });
-
+  console.log(data);
   return data.newsArticles.data[0].attributes;
 }

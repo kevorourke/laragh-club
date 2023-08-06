@@ -24,8 +24,8 @@ export default async function RootLayout({ children }) {
       <body className={inter.className}>
         <SupabaseProvider session={session}>
           <Navbar />
-          <div className="relative min-h-screen">
-            <div className="pb-2.5">{children}</div>
+          <div className="relative min-h-screen m-7">
+            <div className="pb-56">{children}</div>
             <Footer />
           </div>
         </SupabaseProvider>

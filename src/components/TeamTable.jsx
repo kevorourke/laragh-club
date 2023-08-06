@@ -1,27 +1,16 @@
 import Link from "next/link";
 
-export default function StackedTable({ members }) {
+export default function TeamsStackedTable({ teams }) {
   return (
     <div className="px-4 sm:px-6 lg:px-8">
       <div className="sm:flex sm:items-center">
         <div className="sm:flex-auto">
           <h1 className="text-base font-semibold leading-6 text-gray-900">
-            Users
+            Teams
           </h1>
           <p className="mt-2 text-sm text-gray-700">
-            A list of all the users in your account including their name, Phone
-            Number, email and role.
+            All the teams in the club, click view to see players on the team
           </p>
-        </div>
-        <div className="mt-4 sm:ml-16 sm:mt-0 sm:flex-none">
-          <Link href="/members/register" legacyBehavior passHref>
-            <button
-              type="button"
-              className="block rounded-md bg-indigo-600 px-3 py-2 text-center text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
-            >
-              Add user
-            </button>
-          </Link>
         </div>
       </div>
       <div className="-mx-4 mt-8 sm:-mx-0">
@@ -38,69 +27,55 @@ export default function StackedTable({ members }) {
                 scope="col"
                 className="hidden px-3 py-3.5 text-left text-sm font-semibold text-gray-900 lg:table-cell"
               >
-                Phone Number
+                Code
               </th>
               <th
                 scope="col"
                 className="hidden px-3 py-3.5 text-left text-sm font-semibold text-gray-900 sm:table-cell"
               >
-                Status
+                Year
               </th>
               <th
                 scope="col"
                 className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900"
               >
-                Date of Birth
+                Adult
               </th>
               <th scope="col" className="relative py-3.5 pl-3 pr-4 sm:pr-0">
-                <span className="sr-only">Edit</span>
+                <span className="sr-only">View</span>
               </th>
             </tr>
           </thead>
           <tbody className="divide-y divide-gray-200 bg-white">
-            {members.map((member) => (
-              <tr key={member.id}>
+            {teams.map((team) => (
+              <tr key={team.id}>
                 <td className="w-full max-w-0 py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:w-auto sm:max-w-none sm:pl-0">
-                  {member.forename} {member.surname}
+                  {team.team_name}
                   <dl className="font-normal lg:hidden">
-                    <dt className="sr-only">Phone Number</dt>
+                    <dt className="sr-only">Code</dt>
                     <dd className="mt-1 truncate text-gray-700">
-                      {member.phone_number}
+                      {team.code.toUpperCase()}
                     </dd>
-                    <dt className="sr-only sm:hidden">Status</dt>
+                    <dt className="sr-only sm:hidden">Year</dt>
                     <dd className="mt-1 truncate text-gray-500 sm:hidden">
-                      {member.payment_due ? (
-                        <span className="inline-flex items-center rounded-md bg-red-50 px-2 py-1 text-xs font-medium text-red-700 ring-1 ring-inset ring-red-600/10">
-                          Payment Due
-                        </span>
-                      ) : (
-                        <span className="inline-flex items-center rounded-md bg-green-50 px-2 py-1 text-xs font-medium text-green-700 ring-1 ring-inset ring-green-600/20">
-                          Active
-                        </span>
-                      )}
+                      {team.year === null
+                        ? "Senior"
+                        : JSON.stringify(team.year)}
                     </dd>
                   </dl>
                 </td>
                 <td className="hidden px-3 py-4 text-sm text-gray-500 lg:table-cell">
-                  {member.phone_number}
+                  {team.code.toUpperCase()}
                 </td>
                 <td className="hidden px-3 py-4 text-sm text-gray-500 sm:table-cell">
-                  {member.payment_due ? (
-                    <span className="inline-flex items-center rounded-md bg-red-50 px-2 py-1 text-xs font-medium text-red-700 ring-1 ring-inset ring-red-600/10">
-                      Payment Due
-                    </span>
-                  ) : (
-                    <span className="inline-flex items-center rounded-md bg-green-50 px-2 py-1 text-xs font-medium text-green-700 ring-1 ring-inset ring-green-600/20">
-                      Active
-                    </span>
-                  )}
+                  {team.year === null ? "Senior" : JSON.stringify(team.year)}
                 </td>
                 <td className="px-3 py-4 text-sm text-gray-500">
-                  {member.dob}
+                  {team.adult}
                 </td>
                 <td className="py-4 pl-3 pr-4 text-right text-sm font-medium sm:pr-0">
                   <a href="#" className="text-indigo-600 hover:text-indigo-900">
-                    Edit<span className="sr-only">, {member.name}</span>
+                    Edit<span className="sr-only">, {team.name}</span>
                   </a>
                 </td>
               </tr>
