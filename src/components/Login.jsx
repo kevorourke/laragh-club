@@ -21,9 +21,12 @@ export default function Login() {
       },
     });
     console.log(data.user);
-    error ? setErrorStatus(error) : null;
+    if (error) {
+      setErrorStatus(error);
+      return;
+    }
     console.log(error.message);
-    router.refresh();
+    router.redirect("/");
   };
 
   const handleSignIn = async () => {
