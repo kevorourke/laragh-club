@@ -5,7 +5,7 @@ async function Layout({ children }) {
   const session = await getProfile();
 
   console.log(session);
-  return <>{session.role === "admim" ? children : redirect("/")}</>;
+  return <>{session.role === "admin" ? children : redirect("/")}</>;
 }
 
 export default Layout;
