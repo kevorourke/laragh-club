@@ -1,72 +1,76 @@
 "use client";
-import { create_team_fields } from "@/lib/form_data";
-import { useSupabase, useSession } from "@/supabase/SupabaseProvider";
-import Form from "@/components/Form";
-import { useState } from "react";
-
+import { useSupabase } from "@/supabase/SupabaseProvider";
+import { useRouter } from "next/navigation";
+import { useState, useEffect } from "react";
 function Page() {
-  const allfields = create_team_fields;
-
-  const supabase = useSupabase();
-  const session = useSession();
-
-  // const onSubmit = methods.handleSubmit((data) => {
-  //   console.log(data);
-  // });
-
-  const onSubmit = async () => {
-    const { error } = await supabase
-      .from("teams")
-      .insert({ ...inputValues, user_id: session.user.id });
-  };
-
-  const generateInitialState = (data) => {
-    let initialObj = {};
-    data.forEach((item) => (initialObj = { ...initialObj, [item.name]: null }));
-    initialObj = { ...initialObj, year: [], country: "Ireland" };
-    return initialObj;
-  };
-
-  const initialState = generateInitialState(allfields);
-  const [inputValues, setInputValues] = useState(initialState);
-
-  const handleChange = ({ target }) => {
-    let value = null;
-    let key = target.id;
-
-    if (target.type === "checkbox") {
-      const parent = target.dataset.parent;
-      if (target.checked) {
-        const newArr = inputValues[parent].push(key);
-        setInputValues({
-          ...inputValues,
-          [parent]: newArr,
-        });
-      }
-
-      return;
-      // value = target.checked;
-    } else if (target.type === "radio") {
-      key = target.name;
-      value = target.id;
-    } else {
-      value = target.value;
+  const router = useRouter();
+  const onClick = async (person) => {
+    let newRole;
+    person.role === "user" ? (newRole = "team_manager") : (newRole = "user");
+    const { data, error } = await supabase
+      .from("profiles")
+      .update({ role: newRole })
+      .eq("id", person.id);
+    if (error) {
+      console.log(error.message);
     }
-
-    setInputValues({
-      ...inputValues,
-      [key]: value,
-    });
+    router.refresh();
   };
+  const [people, setPeople] = useState([]);
+  const supabase = useSupabase();
+
+  useEffect(() => {
+    const getData = async () => {
+      const data = await getProfiles(supabase);
+      setPeople(data);
+    };
+    getData();
+  }, []);
+
+  const getProfiles = async (supabase) => {
+    const { data, error } = await supabase
+      .from("profiles")
+      .select()
+      .in("role", ["user", "team_manager"]);
+
+    if (error) {
+      console.log(error.message);
+    }
+    return data;
+  };
+
   return (
-    <Form
-      allfields={allfields}
-      title={"Add new member"}
-      description={"Please fill out all the details below"}
-      inputValues={inputValues}
-      handleChange={handleChange}
-      onSubmit={onSubmit}
-    />
+    <div>
+      <ul role="list" className="divide-y divide-gray-100">
+        {people.map((person) => (
+          <li
+            key={person.email}
+            className="flex items-center justify-between gap-x-6 py-5"
+          >
+            <div className="flex min-w-0 gap-x-4">
+              <div className="min-w-0 flex-auto">
+                <p className="text-sm font-semibold leading-6 text-gray-900">
+                  {person.email}
+                </p>
+                <p className="mt-1 truncate text-xs leading-5 text-gray-500">
+                  {" "}
+                  Role: {person.role}
+                </p>
+              </div>
+            </div>
+            <button
+              href={person.email}
+              onClick={() => onClick(person)}
+              className="rounded-full bg-white px-2.5 py-1 text-xs font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50"
+            >
+              {person.role === "user"
+                ? "Update role to team manager"
+                : "Update role to user"}
+            </button>
+          </li>
+        ))}
+      </ul>
+    </div>
   );
 }
 

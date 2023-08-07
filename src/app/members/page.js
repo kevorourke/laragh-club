@@ -12,9 +12,17 @@ export default async function Page() {
 
   return (
     <>
-      <StackedTable members={members} />
+      <StackedTable
+        members={members}
+        title="My Members"
+        description="The members that are associated with your profile"
+        link="/members/register"
+        buttonText="Add New Member"
+      />
 
-      {paymentMembers ? <CheckoutButton members={paymentMembers} /> : null}
+      {paymentMembers.length != 0 ? (
+        <CheckoutButton members={paymentMembers} />
+      ) : null}
     </>
   );
 }

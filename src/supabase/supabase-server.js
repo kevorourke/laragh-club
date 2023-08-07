@@ -12,7 +12,25 @@ async function getSession() {
     const {
       data: { session },
     } = await supabase.auth.getSession();
+
     return session;
+  } catch (error) {
+    console.error("Error:", error);
+    return null;
+  }
+}
+
+async function getProfile() {
+  const supabase = createServerSupabaseClient();
+  try {
+    const {
+      data: { session },
+    } = await supabase.auth.getSession();
+    const { data } = await supabase
+      .from("profiles")
+      .select()
+      .eq("id", session.user.id);
+    return data[0];
   } catch (error) {
     console.error("Error:", error);
     return null;
@@ -103,4 +121,5 @@ export {
   getActiveProductsWithPrices,
   getTeam,
   getTeamMembers,
+  getProfile,
 };

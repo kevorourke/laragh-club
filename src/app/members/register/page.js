@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-
+import { redirect } from "next/navigation";
 import { add_member_fields } from "@/lib/form_data";
 import { useSupabase, useSession } from "@/supabase/SupabaseProvider";
 import Form from "@/components/Form";
@@ -19,13 +19,17 @@ function Page() {
     const { error } = await supabase
       .from("members")
       .insert({ ...inputValues, user_id: session.user.id });
+
+    if (error) {
+      alert("There was an error, please try again");
+    } else {
+      redirect("/members");
+    }
   };
 
   const generateInitialState = (data) => {
     let initialObj = {};
-    data.forEach(
-      (item) => (initialObj = { ...initialObj, [item.field_name]: null })
-    );
+    data.forEach((item) => (initialObj = { ...initialObj, [item.name]: null }));
     initialObj = { ...initialObj, county: "Antrim", country: "Ireland" };
     return initialObj;
   };
@@ -56,7 +60,7 @@ function Page() {
   return (
     <Form
       allfields={allfields}
-      title={"Create new team"}
+      title={"Create new member"}
       description={"Please fill out all the details below"}
       inputValues={inputValues}
       handleChange={handleChange}

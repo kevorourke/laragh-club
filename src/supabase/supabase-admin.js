@@ -20,6 +20,20 @@ const createNewPaymentRecord = async (data) => {
   console.log("Payment inserted successfully");
 };
 
+const updateLottoTicketRecord = async (data) => {
+  const paymentData = {
+    ticketIds: data.ticket_ids,
+  };
+  console.log(paymentData);
+
+  const { error } = await supabaseAdmin
+    .from("lotto_ticket")
+    .update(payment_complete, true)
+    .in("id", ticketIds);
+  if (error) throw error;
+  console.log("Payment inserted successfully");
+};
+
 const getTeamIds = async () => {
   const { data, error } = await supabaseAdmin.from("teams").select("id");
   return data;
@@ -39,4 +53,10 @@ const getMember = async (id) => {
   return data;
 };
 
-export { createNewPaymentRecord, getTeamIds, getMemberIds, getMember };
+export {
+  createNewPaymentRecord,
+  getTeamIds,
+  getMemberIds,
+  getMember,
+  updateLottoTicketRecord,
+};

@@ -40,20 +40,14 @@ function CheckoutButton({ members }) {
       quantity: playingAdultCountA,
     });
     metadataObj.memberIds = JSON.stringify(metadataObj.memberIds);
+    metadataObj.product = "membership";
     setMetadata(metadataObj);
     setCardData([
       { name: "Adult Member", quantity: adultCountA },
       { name: "Child Member", quantity: childCountA },
       { name: "Playing Adult Member", quantity: playingAdultCountA },
     ]);
-    // fetchPrices();
   }, []);
-
-  // const fetchPrices = async () => {
-  //   const { data } = await axios.get("/api/getproducts");
-  //   // setPrices(data)
-  //   console.log(data);
-  // };
 
   const handleSubmit = async (e) => {
     e.preventDefault();

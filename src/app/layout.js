@@ -4,6 +4,7 @@ import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import SupabaseProvider from "@/supabase/SupabaseProvider";
 import { getSession } from "@/supabase/supabase-server";
+import StatusBar from "@/components/StatusBar";
 
 // const inter = Inter({ subsets: ["latin"] });
 
@@ -22,6 +23,7 @@ export default async function RootLayout({ children }) {
       <body>
         <SupabaseProvider session={session}>
           <Navbar />
+          {session ? <StatusBar id={session.user.id} /> : null}
           <div className="relative min-h-screen m-7">
             <div className="pb-56">{children}</div>
             <Footer />
