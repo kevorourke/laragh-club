@@ -1,52 +1,67 @@
-import Stripe from "stripe";
-import { createNewPaymentRecord } from "@/supabase/supabase-admin";
+const stripe = require("stripe")(process.env.STRIPE_SECRET_KEY);
+const endpointSecret = process.env.STRIPE_WEBHOOK_SECRET;
 
-export default async function POST(req, res) {
-  // Log the entire request object to diagnose its structure
-  console.log("Request object:", req);
-
-  // Safely attempt to extract the Stripe-Signature header
-  const sig = req && req.headers ? req.headers["stripe-signature"] : null;
-
-  // If for some reason we still don't have a signature, log it and exit early
-  if (!sig) {
-    console.error("No Stripe signature found in the request.");
-    res.status(400).json({ error: "Missing Stripe signature" });
+export default async function handler(req, res) {
+  if (req.method !== "POST") {
+    res.status(405).end(); // Method not allowed
     return;
   }
 
-  const webhookSecret = process.env.STRIPE_WEBHOOK_SECRET;
-  const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
+  const buf = await buffer(req);
+  const payload = buf.toString("utf-8");
   let event;
 
-  try {
-    if (!webhookSecret) throw new Error("No webhook secret provided");
-    event = stripe.webhooks.constructEvent(req.body, sig, webhookSecret);
-  } catch (err) {
-    console.error(`Error message: ${err.message}`);
-    res.status(400).json({ error: `Webhook Error: ${err.message}` });
-    return;
-  }
-
-  if (event.type === "checkout.session.completed") {
+  if (endpointSecret) {
+    const signature = req.headers["stripe-signature"];
     try {
-      const checkoutSession = event.data.object;
-      let data = {};
-      data.amount = checkoutSession.amount_total;
-      data.member_ids = JSON.parse(checkoutSession.metadata.memberIds);
-      await createNewPaymentRecord(data);
-      console.log("Checkout Session:", checkoutSession);
-    } catch (error) {
-      console.error(
-        "Error processing checkout.session.completed event:",
-        error
+      event = stripe.webhooks.constructEvent(
+        payload,
+        signature,
+        endpointSecret
       );
-      res.status(400).json({
-        error: "Webhook handler failed. Check server logs for more details.",
-      });
-      return;
+    } catch (err) {
+      console.log(`⚠️  Webhook signature verification failed.`, err.message);
+      return res.status(400).end(); // Bad request response
     }
+  } else {
+    event = JSON.parse(payload);
   }
 
-  res.json({ received: true });
+  // Handle the event
+  switch (event.type) {
+    case "checkout.session.completed":
+      try {
+        const checkoutSession = event.data.object;
+        let data = {};
+        data.amount = checkoutSession.amount_total;
+        data.member_ids = JSON.parse(checkoutSession.metadata.memberIds);
+        await createNewPaymentRecord(data);
+        console.log("Checkout Session:", checkoutSession);
+      } catch (error) {
+        console.error(
+          "Error processing checkout.session.completed event:",
+          error
+        );
+        res.status(400).json({
+          error: "Webhook handler failed. Check server logs for more details.",
+        });
+        return;
+      }
+      break;
+    default:
+      // Unexpected event type
+      console.log(`Unhandled event type ${event.type}.`);
+  }
+
+  res.json({ received: true }); // Return a response to acknowledge receipt of the event
+}
+
+// This helper function is necessary because the Stripe webhook's signature verification requires
+// the raw body, not the parsed body that Next.js provides by default.
+async function buffer(readable) {
+  const chunks = [];
+  for await (const chunk of readable) {
+    chunks.push(chunk);
+  }
+  return Buffer.concat(chunks);
 }
