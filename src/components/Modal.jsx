@@ -9,10 +9,10 @@ export default function Modal({
   colour,
 }) {
   return (
-    <div className="relative z-10">
-      <div className="fixed inset-0 z-10 overflow-y-auto">
+    <div className="relative -z-10">
+      <div className="fixed inset-0 -z-10 ">
         <div className="flex min-h-full items-end justify-center p-4 text-center sm:items-center sm:p-0">
-          <div className="relative transform overflow-hidden rounded-lg bg-white px-4 pb-4 pt-5 text-left shadow-xl transition-all sm:my-8 sm:w-full sm:max-w-sm sm:p-6">
+          <div className="relative rounded-lg bg-white px-4 pb-4 pt-5 text-left shadow-xl transition-all sm:my-8 sm:w-full sm:max-w-sm sm:p-6">
             <div>
               <div
                 className={`mx-auto flex h-12 w-12 items-center justify-center rounded-full bg-${colour}-100`}

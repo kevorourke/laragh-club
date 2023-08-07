@@ -5,8 +5,8 @@ export default function Page() {
     <Modal
       title="Payment Failed"
       description="Please try again"
-      link="/members"
-      buttonText="Go back to dashboard"
+      link="/"
+      buttonText="Go back to home"
       colour="red"
     />
   );

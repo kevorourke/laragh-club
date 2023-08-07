@@ -6,7 +6,7 @@ export default function Page() {
       title="Payment Success"
       description="You should have received an email reciept"
       link="/members"
-      buttonText="Go back to dashboard"
+      buttonText="Go back to home"
       colour="green"
     />
   );
