@@ -39,9 +39,3 @@ export async function POST(req) {
       console.log(`Unhandled event type ${event.type}.`);
   }
 }
-
-export const config = {
-  api: {
-    bodyParser: false,
-  },
-};
