@@ -65,10 +65,42 @@ const getActiveProductsWithPrices = async () => {
   return data ?? [];
 };
 
+const getTeamMembers = async (team) => {
+  const supabase = createServerSupabaseClient();
+  let members;
+  if (team.adult) {
+    let { membersRes, membersError } = await supabase
+      .from("members")
+      .select("id");
+    // .eq(team.code, true);
+    console.log("members");
+    console.log(membersRes);
+    return membersRes;
+  } else {
+    const { membersRes, error } = await supabase
+      .from("members")
+      .select()
+      .eq(team.code, true)
+      .in("playing_year", team.year);
+
+    console.log(error);
+    return membersRes;
+  }
+};
+
+const getTeam = async (id) => {
+  const supabase = createServerSupabaseClient();
+  const { data, error } = await supabase.from("teams").select().eq("id", id);
+
+  return data;
+};
+
 export {
   createServerSupabaseClient,
   getSession,
   getUserDetails,
   getSubscription,
   getActiveProductsWithPrices,
+  getTeam,
+  getTeamMembers,
 };
