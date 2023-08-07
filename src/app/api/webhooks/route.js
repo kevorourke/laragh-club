@@ -1,7 +1,7 @@
 import Stripe from "stripe";
 import { createNewPaymentRecord } from "@/supabase/supabase-admin";
 
-export default async function handleStripeWebhook(req, res) {
+export default async function POST(req, res) {
   // Log the entire request object to diagnose its structure
   console.log("Request object:", req);
 
