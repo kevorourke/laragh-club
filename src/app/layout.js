@@ -1,11 +1,11 @@
 import "./globals.css";
-import { Inter } from "next/font/google";
+// import { Inter } from "next/font/google";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import SupabaseProvider from "@/supabase/SupabaseProvider";
 import { getSession } from "@/supabase/supabase-server";
 
-const inter = Inter({ subsets: ["latin"] });
+// const inter = Inter({ subsets: ["latin"] });
 
 export const metadata = {
   title: "Laragh United GAA",
@@ -18,8 +18,8 @@ export default async function RootLayout({ children }) {
   const session = await getSession();
 
   return (
-    <html lang="en">
-      <body className={inter.className}>
+    <html lang="en" className="font-sans">
+      <body>
         <SupabaseProvider session={session}>
           <Navbar />
           <div className="relative min-h-screen m-7">
