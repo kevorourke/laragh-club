@@ -1,19 +1,22 @@
-import Stripe from "stripe";
+import { NextResponse } from "next/server";
 
-const stripe = new Stripe(process.env.STRIPE_SECRET_KEY, {
-  apiVersion: "2022-11-15",
-});
+import { createNewPaymentRecord } from "@/supabase/supabase-admin";
 
 export async function POST(req) {
-  let event;
-  const rawBody = await req.text(); // Have also tried using await buffer(req) from 'micro' but no luck
-  const stripeHeader = req.headers.get("stripe-signature"); // This returns undefined always....
-  event = stripe.webhooks.constructEvent(
-    rawBody,
-    stripeHeader,
-    process.env.STRIPE_WEBHOOK_SECRET_KEY
-  );
-
+  const data = await req.text();
+  console.log(JSON.parse(data));
+  let event = JSON.parse(data);
+  // const sig = headers().get("Stripe-Signature");
+  // const webhookSecret = process.env.STRIPE_WEBHOOK_SECRET;
+  // let event;
+  // try {
+  //   if (!sig || !webhookSecret) return;
+  //   event = stripe.webhooks.constructEvent(body, sig, webhookSecret);
+  // } catch (err) {
+  //   console.log(`❌ Error message: ${err.message}`);
+  //   return new Response(`Webhook Error: ${err.message}`, { status: 400 });
+  // }
+  // have to return response promptly, ie without waiting for back-end process or stripe will potentially flag your account
   switch (event.type) {
     case "checkout.session.completed":
       try {
@@ -38,4 +41,8 @@ export async function POST(req) {
       // Unexpected event type
       console.log(`Unhandled event type ${event.type}.`);
   }
+  return NextResponse.json(
+    { message: "successfully received" },
+    { status: 200 }
+  );
 }
