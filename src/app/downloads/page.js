@@ -44,7 +44,6 @@ async function getData() {
     });
 
     const { data } = response.data;
-    console.log(data.downloads.data);
     return data.downloads.data;
   } catch (error) {
     console.error("Error fetching data:", error);

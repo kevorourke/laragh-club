@@ -21,14 +21,13 @@ const createNewPaymentRecord = async (data) => {
 };
 
 const updateLottoTicketRecord = async (data) => {
-  const paymentData = {
-    ticketIds: data.ticket_ids,
-  };
-  console.log(paymentData);
+  const ticketIds = data.ticket_ids;
+
+  console.log(ticketIds);
 
   const { error } = await supabaseAdmin
     .from("lotto_ticket")
-    .update(payment_complete, true)
+    .update({ payment_complete: true })
     .in("id", ticketIds);
   if (error) throw error;
   console.log("Payment inserted successfully");

@@ -9,6 +9,7 @@ export default function Home() {
   const [name, setName] = useState("");
   const [phone, setPhone] = useState("");
   const supabase = useSupabase();
+  const [error, setError] = useState("");
 
   const handleBallClick = (ticketIndex, ballNumber) => {
     let newTickets = [...tickets];
@@ -28,9 +29,15 @@ export default function Home() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+
+    if (!name || !phone) {
+      setError("Name and phone number are required!");
+      return;
+    }
+
     for (let i = 0; i < tickets.length; i++) {
       if (tickets[i].length !== 4) {
-        alert("Each ticket must have 4 numbers");
+        setError("Each ticket must have 4 numbers");
         return;
       }
     }
@@ -45,13 +52,18 @@ export default function Home() {
       };
     });
 
-    const { error } = await supabase.from("lotto_ticket").insert(finalSubmit);
-
+    const { error: supabaseError } = await supabase
+      .from("lotto_ticket")
+      .insert(finalSubmit);
+    if (supabaseError) {
+      setError("Error submitting tickets: " + supabaseError.message);
+      return;
+    }
     const ids = finalSubmit.map((ticket) => {
       return ticket.id;
     });
 
-    const { data } = await axios.post(
+    const { data, error: apiError } = await axios.post(
       "/api/payment",
       {
         items: [
@@ -69,14 +81,16 @@ export default function Home() {
       }
     );
 
-    // if (error) {
-    //   alert("Error submitting tickets: " + error.message);
-    //   return;
-    // } else {
-    //   // alert("Tickets submitted successfully");
-    //   // return;
-    // }
+    if (apiError) {
+      setError("Error getting stripe " + apiError.message);
+      return;
+    }
+
     window.location.assign(data);
+
+    if (error) {
+      alert("Error: " + error);
+    }
   };
 
   return (
@@ -87,6 +101,7 @@ export default function Home() {
         placeholder="Name"
         value={name}
         onChange={(e) => setName(e.target.value)}
+        required
         className="mb-2 px-3 py-2 placeholder-gray-400 text-gray-700 bg-white rounded text-sm shadow focus:outline-none focus:shadow-outline"
       />
       <input
@@ -94,6 +109,7 @@ export default function Home() {
         placeholder="Phone"
         value={phone}
         onChange={(e) => setPhone(e.target.value)}
+        required
         className="mb-2 px-3 py-2 placeholder-gray-400 text-gray-700 bg-white rounded text-sm shadow focus:outline-none focus:shadow-outline"
       />
 
@@ -123,31 +139,34 @@ export default function Home() {
       ))}
 
       {/* Buttons to add a new ticket and submit all tickets */}
-      <button
-        onClick={() => {
-          let removeTicketArr = [...tickets];
-          console.log(removeTicketArr);
-          removeTicketArr.pop();
-          console.log(removeTicketArr);
-          setTickets(removeTicketArr);
-        }}
-        className="rounded-md bg-indigo-600 px-3.5 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
-      >
-        Remove Ticket
-      </button>
-      <button
-        onClick={() => setTickets([...tickets, []])}
-        className="rounded-md bg-indigo-600 px-3.5 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
-      >
-        Add Ticket
-      </button>
-      <button
-        type="button"
-        onClick={handleSubmit}
-        className="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
-      >
-        Submit
-      </button>
+      <div className="flex flex-row mb:flex-col justify-evenly">
+        <button
+          onClick={() => {
+            let removeTicketArr = [...tickets];
+            console.log(removeTicketArr);
+            removeTicketArr.pop();
+            console.log(removeTicketArr);
+            setTickets(removeTicketArr);
+          }}
+          className="rounded-md bg-red-600 px-3.5 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-red-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-red-600"
+        >
+          Remove Ticket
+        </button>
+        <button
+          onClick={() => setTickets([...tickets, []])}
+          className="rounded-md bg-green-600 px-3.5 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-green-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-green-600"
+        >
+          Add Ticket
+        </button>
+        <button
+          type="button"
+          onClick={handleSubmit}
+          className="rounded-md bg-indigo-600 px-3.5 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+        >
+          Purchase
+        </button>
+      </div>
+      {error && <div className="text-red-500 mt-3">{error}</div>}
     </div>
   );
 }

@@ -3,6 +3,9 @@ import { GET_ALL_SLUGS, GET_INDIVIDUAL_POST } from "../../../graphql/queries";
 
 export default async function Page({ params }) {
   const data = await getData(params);
+  if (!data || data.length === 0) {
+    return <div>No content available at the moment.</div>;
+  }
   return (
     <div className="bg-white px-6 py-32 lg:px-8">
       <div className="mx-auto max-w-3xl text-base leading-7 text-gray-700">
@@ -38,7 +41,7 @@ async function getData(params) {
     });
 
     const { data } = response.data;
-
+    console.log(data);
     return data.newsArticles.data[0].attributes;
   } catch (error) {
     console.error("Error fetching data:", error);
