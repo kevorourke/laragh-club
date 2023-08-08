@@ -1,6 +1,4 @@
-const { gql } = require("@apollo/client");
-
-const GET_ALL_POSTS = gql`
+const GET_ALL_POSTS = `
   query {
     newsArticles {
       data {
@@ -24,7 +22,7 @@ const GET_ALL_POSTS = gql`
   }
 `;
 
-const GET_ALL_SLUGS = gql`
+const GET_ALL_SLUGS = `
   query {
     newsArticles {
       data {
@@ -37,7 +35,7 @@ const GET_ALL_SLUGS = gql`
   }
 `;
 
-const GET_INDIVIDUAL_POST = gql`
+const GET_INDIVIDUAL_POST = `
   query ($slugUrl: String!) {
     newsArticles(filters: { urlSlug: { eq: $slugUrl } }) {
       data {
@@ -50,7 +48,7 @@ const GET_INDIVIDUAL_POST = gql`
   }
 `;
 
-const GET_ABOUT_CONTENT = gql`
+const GET_ABOUT_CONTENT = `
   query {
     abouts {
       data {

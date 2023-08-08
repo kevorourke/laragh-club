@@ -1,10 +1,13 @@
 import Image from "next/image";
-import { ApolloClient, InMemoryCache } from "@apollo/client";
+import axios from "axios";
 import { GET_ABOUT_CONTENT } from "../../graphql/queries";
 import ReactMarkdown from "react-markdown";
 
 export default async function Page() {
   const data = await getData();
+  if (!data || data.length === 0) {
+    return <div>No about content available at the moment.</div>;
+  }
   return (
     <div className="bg-white px-6 py-32 lg:px-8">
       <div className="mx-auto max-w-3xl text-base leading-7 text-gray-700">
@@ -29,14 +32,18 @@ export default async function Page() {
   );
 }
 
-const client = new ApolloClient({
-  uri: `${process.env.STRAPI_URL}/graphql`,
-  cache: new InMemoryCache(),
-});
-
 async function getData() {
-  const { data } = await client.query({
-    query: GET_ABOUT_CONTENT,
-  });
-  return data.abouts.data[0].attributes;
+  try {
+    const response = await axios.post(`${process.env.STRAPI_URL}/graphql`, {
+      query: GET_ABOUT_CONTENT,
+    });
+
+    const { data } = response.data;
+
+    return data.abouts.data[0].attributes;
+  } catch (error) {
+    console.error("Error fetching data:", error);
+
+    return [];
+  }
 }

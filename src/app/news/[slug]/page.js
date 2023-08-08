@@ -1,4 +1,4 @@
-import { ApolloClient, InMemoryCache } from "@apollo/client";
+import axios from "axios";
 import { GET_ALL_SLUGS, GET_INDIVIDUAL_POST } from "../../../graphql/queries";
 
 export default async function Page({ params }) {
@@ -18,14 +18,11 @@ export default async function Page({ params }) {
   );
 }
 
-const client = new ApolloClient({
-  uri: `${process.env.STRAPI_URL}/graphql`,
-  cache: new InMemoryCache(),
-});
-
 async function generateStaticParams() {
-  const { data } = await client.query({ query: GET_ALL_SLUGS });
-
+  const response = await axios.post(`${process.env.STRAPI_URL}/graphql`, {
+    query: GET_ALL_SLUGS,
+  });
+  const { data } = response.data;
   return data.newsArticles.data.map(
     (article = {
       slug: article.attributes.urlSlug,
@@ -34,10 +31,18 @@ async function generateStaticParams() {
 }
 
 async function getData(params) {
-  const { data } = await client.query({
-    query: GET_INDIVIDUAL_POST,
-    variables: { slugUrl: params.slug },
-  });
+  try {
+    const response = await axios.post(`${process.env.STRAPI_URL}/graphql`, {
+      query: GET_INDIVIDUAL_POST,
+      variables: { slugUrl: params.slug },
+    });
 
-  return data.newsArticles.data[0].attributes;
+    const { data } = response.data;
+
+    return data.newsArticles.data[0].attributes;
+  } catch (error) {
+    console.error("Error fetching data:", error);
+
+    return [];
+  }
 }

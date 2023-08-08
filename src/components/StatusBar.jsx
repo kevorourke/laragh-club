@@ -37,7 +37,7 @@ function StatusBar({ id }) {
       );
     } else if (profile.role === "team_manager") {
       return (
-        <Link href="/members/team-manager/teams" legacyBehavior passHref>
+        <Link href="/members/team-manager/" legacyBehavior passHref>
           <button className="flex flex-1 justify-end text-white">
             Go to Team Manager Portal
           </button>

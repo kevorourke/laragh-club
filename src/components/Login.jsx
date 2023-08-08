@@ -30,16 +30,11 @@ export default function Login() {
 
   const handleSignIn = async (e) => {
     e.preventDefault();
-    const { data, error } = await supabase.auth.signIn({
+    const { data, error } = await supabase.auth.signInWithPassword({
       email,
       password,
     });
     error ? setErrorStatus(error.message) : router.push("/");
-  };
-
-  const handleSignOut = async () => {
-    await supabase.auth.signOut();
-    router.reload();
   };
 
   return (

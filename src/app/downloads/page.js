@@ -3,6 +3,9 @@ import { GET_ALL_DOWNLOADS } from "../../graphql/queries";
 
 export default async function Page() {
   const data = await getData();
+  if (!data || data.length === 0) {
+    return <div>No downloads available at the moment.</div>;
+  }
   return (
     <div>
       <ul role="list" className="divide-y divide-gray-100">
@@ -34,11 +37,6 @@ export default async function Page() {
   );
 }
 
-// const client = new ApolloClient({
-//   uri: `${process.env.STRAPI_URL}/graphql`,
-//   cache: new InMemoryCache(),
-// });
-
 async function getData() {
   try {
     const response = await axios.post(`${process.env.STRAPI_URL}/graphql`, {
@@ -47,11 +45,10 @@ async function getData() {
 
     const { data } = response.data;
     console.log(data.downloads.data);
-    // console.log(data.downloads.data);
-    // console.log(response);
     return data.downloads.data;
   } catch (error) {
     console.error("Error fetching data:", error);
-    throw error;
+
+    return [];
   }
 }

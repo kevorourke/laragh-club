@@ -1,19 +1,21 @@
 import NewsTile from "./NewsTile";
-import { ApolloClient, InMemoryCache } from "@apollo/client";
+import axios from "axios";
 import { GET_ALL_POSTS } from "../graphql/queries";
 
 async function getData() {
-  console.log(process.env.STRAPI_URL);
-  const client = new ApolloClient({
-    uri: `${process.env.STRAPI_URL}/graphql`,
-    cache: new InMemoryCache(),
-  });
+  try {
+    const response = await axios.post(`${process.env.STRAPI_URL}/graphql`, {
+      query: GET_ALL_POSTS,
+    });
 
-  const { data } = await client.query({
-    query: GET_ALL_POSTS,
-  });
+    const { data } = response.data;
 
-  return data.newsArticles.data;
+    return data.newsArticles.data;
+  } catch (error) {
+    console.error("Error fetching data:", error);
+
+    return [];
+  }
 }
 
 async function LatestPost({ limit }) {
