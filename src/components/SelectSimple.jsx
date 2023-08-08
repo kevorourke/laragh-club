@@ -1,14 +1,5 @@
-"use clien";
-
 function SelectInput({ formData, change, selected }) {
-  const {
-    label,
-    name,
-    type,
-
-    options,
-    placeholder,
-  } = formData;
+  const { label, name, options, placeholder } = formData;
 
   return (
     <div className="sm:grid sm:grid-cols-3 sm:items-start sm:gap-4 sm:py-6">

@@ -1,25 +1,25 @@
 const GET_ALL_POSTS = `
-  query {
-    newsArticles {
-      data {
-        id
-        attributes {
-          publishedAt
-          title
-          description
-          urlSlug
-          image {
-            data {
-              attributes {
-                url
-              }
+query {
+  newsArticles(sort: "id:DESC") {
+    data {
+      id
+      attributes {
+        publishedAt
+        title
+        description
+        urlSlug
+        image {
+          data {
+            attributes {
+              url
             }
           }
         }
-        __typename
       }
+      __typename
     }
   }
+}
 `;
 
 const GET_ALL_SLUGS = `

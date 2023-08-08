@@ -35,12 +35,7 @@ export default function TeamsStackedTable({ teams }) {
               >
                 Year
               </th>
-              <th
-                scope="col"
-                className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900"
-              >
-                Adult
-              </th>
+
               <th scope="col" className="relative py-3.5 pl-3 pr-4 sm:pr-0">
                 <span className="sr-only">View</span>
               </th>
@@ -70,9 +65,7 @@ export default function TeamsStackedTable({ teams }) {
                 <td className="hidden px-3 py-4 text-sm text-gray-500 sm:table-cell">
                   {team.year === null ? "Senior" : JSON.stringify(team.year)}
                 </td>
-                <td className="px-3 py-4 text-sm text-gray-500">
-                  {team.adult}
-                </td>
+
                 <td className="py-4 pl-3 pr-4 text-right text-sm font-medium sm:pr-0">
                   <a
                     href={`/members/team-manager/${team.id}`}

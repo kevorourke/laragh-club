@@ -5,7 +5,7 @@ export default function Page() {
     <Modal
       title="Payment Success"
       description="You should have received an email reciept"
-      link="/members"
+      link="/"
       buttonText="Go back to home"
       colour="green"
     />
