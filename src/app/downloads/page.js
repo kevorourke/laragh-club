@@ -1,7 +1,5 @@
-import Image from "next/image";
-import { ApolloClient, InMemoryCache } from "@apollo/client";
+import axios from "axios";
 import { GET_ALL_DOWNLOADS } from "../../graphql/queries";
-import ReactMarkdown from "react-markdown";
 
 export default async function Page() {
   const data = await getData();
@@ -36,15 +34,24 @@ export default async function Page() {
   );
 }
 
-const client = new ApolloClient({
-  uri: `${process.env.STRAPI_URL}/graphql`,
-  cache: new InMemoryCache(),
-});
+// const client = new ApolloClient({
+//   uri: `${process.env.STRAPI_URL}/graphql`,
+//   cache: new InMemoryCache(),
+// });
 
 async function getData() {
-  const { data } = await client.query({
-    query: GET_ALL_DOWNLOADS,
-  });
+  try {
+    const response = await axios.post(`${process.env.STRAPI_URL}/graphql`, {
+      query: GET_ALL_DOWNLOADS,
+    });
 
-  return data.downloads.data;
+    const { data } = response.data;
+    console.log(data.downloads.data);
+    // console.log(data.downloads.data);
+    // console.log(response);
+    return data.downloads.data;
+  } catch (error) {
+    console.error("Error fetching data:", error);
+    throw error;
+  }
 }

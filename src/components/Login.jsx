@@ -12,7 +12,8 @@ export default function Login() {
   const router = useRouter();
   const supabase = useSupabase();
 
-  const handleSignUp = async () => {
+  const handleSignUp = async (e) => {
+    e.preventDefault();
     const { data, error } = await supabase.auth.signUp({
       email,
       password,
@@ -20,29 +21,25 @@ export default function Login() {
         emailRedirectTo: `${location.origin}/auth/callback`,
       },
     });
-    console.log(data.user);
     if (error) {
-      setErrorStatus(error);
+      setErrorStatus(error.message);
       return;
     }
-    console.log(error.message);
-    router.redirect("/");
+    router.push("/");
   };
 
-  const handleSignIn = async () => {
-    setErrorStatus(null);
-    const { data, error } = await supabase.auth.signInWithPassword({
+  const handleSignIn = async (e) => {
+    e.preventDefault();
+    const { data, error } = await supabase.auth.signIn({
       email,
       password,
     });
-    console.log(data);
-    error ? setErrorStatus(error.message) : null;
-    router.refresh();
+    error ? setErrorStatus(error.message) : router.push("/");
   };
 
   const handleSignOut = async () => {
     await supabase.auth.signOut();
-    router.refresh();
+    router.reload();
   };
 
   return (

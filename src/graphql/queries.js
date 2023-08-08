@@ -71,7 +71,7 @@ const GET_ABOUT_CONTENT = gql`
   }
 `;
 
-const GET_ALL_DOWNLOADS = gql`
+const GET_ALL_DOWNLOADS = `
   query {
     downloads {
       data {

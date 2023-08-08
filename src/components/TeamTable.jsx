@@ -74,8 +74,12 @@ export default function TeamsStackedTable({ teams }) {
                   {team.adult}
                 </td>
                 <td className="py-4 pl-3 pr-4 text-right text-sm font-medium sm:pr-0">
-                  <a href="#" className="text-indigo-600 hover:text-indigo-900">
-                    Edit<span className="sr-only">, {team.name}</span>
+                  <a
+                    href={`/members/team-manager/${team.id}`}
+                    className="text-indigo-600 hover:text-indigo-900"
+                  >
+                    View team members
+                    <span className="sr-only">, {team.name}</span>
                   </a>
                 </td>
               </tr>
